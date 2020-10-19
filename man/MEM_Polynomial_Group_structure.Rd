@@ -2,7 +2,7 @@
 % Please edit documentation in R/MEM_Polynomial_Group_structure.R
 \name{MEM_Polynomial_Group_structure}
 \alias{MEM_Polynomial_Group_structure}
-\title{FUNCTION_TITLE}
+\title{Polynomial Mixed-Effects Models with Censored and Group-Structured Responses}
 \usage{
 MEM_Polynomial_Group_structure(
   y,
@@ -33,35 +33,35 @@ MEM_Polynomial_Group_structure(
 )
 }
 \arguments{
-\item{y}{PARAM_DESCRIPTION}
+\item{y}{observed responses described either as a data frame containing at least a column named \emph{y} and possibly the columns \emph{x}, \emph{Group}, \emph{Id} and \emph{Cens} (among others), or as a vector of numerical values.}
 
 \item{x}{PARAM_DESCRIPTION, Default: NULL}
 
-\item{Group}{PARAM_DESCRIPTION, Default: NULL}
+\item{Group}{a vector of group indicator for each observed responses which can be defined if \emph{y} is a vector or a data frame without \emph{Group} column. If this variable is defined as NULL (default) and \emph{y} does not contain group information, all observed data are assumed to belong to the same group.}
 
-\item{Id}{PARAM_DESCRIPTION, Default: NULL}
+\item{Id}{a vector of individual ID for each observed responses which can be defined if \emph{y} is a vector or a data frame without \emph{Id} column. By default, this variable is defined as NULL}
 
-\item{Cens}{PARAM_DESCRIPTION, Default: NULL}
+\item{Cens}{a vector of censoring indicator (if y >= ytrue, then Cens == 1). If this variable is defined as NULL (default) and \emph{y} does not contain \emph{Cens} column, observed data are assumed as uncensored.}
 
-\item{marginal_dyn_type}{PARAM_DESCRIPTION, Default: 'polynomial'}
+\item{marginal_dyn_type}{a character variable indicating the type of marginal dynamics. Options are 'polynomial' (default) and 'spline'.}
 
-\item{ind_dyn_type}{PARAM_DESCRIPTION, Default: 'polynomial'}
+\item{ind_dyn_type}{a character variable indicating the type of individual dynamics (random effects). Options are 'polynomial' (default) or 'spline'}
 
-\item{global_intercept}{PARAM_DESCRIPTION, Default: TRUE}
+\item{global_intercept}{a logical scalar. If TRUE (default) a global intercept (no group-specific) is included in the marginal dynamics}
 
-\item{group_intercept}{PARAM_DESCRIPTION, Default: FALSE}
+\item{group_intercept}{a logical scalar (same option for all groups) or vector. For each group, if TRUE, a group-specific intercept is included in the marginal dynamics. By default, this variable is defined as FALSE}
 
-\item{degree_group}{PARAM_DESCRIPTION, Default: 3}
+\item{degree_group}{an integer scalar (same option for all groups) or vector. THe variable indicates for each group either the degree of polynomial functions or spline curves describing marginal dynamics. By default, the variable is fixed at 3.}
 
-\item{Adaptive}{PARAM_DESCRIPTION, Default: 'none'}
+\item{Adaptive}{an optional character variable that can be used when \emph{marginal_dyn_type} or \emph{ind_dyn_type} are chosen as 'spline'. Corresponding B-spline curves are then build with internal knot positions optimally estimated according to data (see \link[DeltaAUCpckg]{Optimal_knot_research} for more details). Options are 'none' (default), 'group , 'individual', and 'both'.}
 
-\item{min_knots_group}{PARAM_DESCRIPTION, Default: 2}
+\item{min_knots_group}{an optional integer scalar indicating the minimum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL}
 
-\item{max_knots_group}{PARAM_DESCRIPTION, Default: 2}
+\item{max_knots_group}{an optional integer scalar indicating the maximum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL}
 
-\item{knots_group}{PARAM_DESCRIPTION, Default: NULL}
+\item{knots_group}{a numerical vector or a list of either numerical vectors or NULL (one for each group) indicating the internal knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).}
 
-\item{df_group}{PARAM_DESCRIPTION, Default: NULL}
+\item{df_group}{an integer scalar (same option for all groups) or vector indicating the degrees of freedom to consider to build marginal B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. One can specify \emph{df_group} rather than \emph{knots_group} (see \link[splines]{bs} for more details). By default, this variable is defined as NULL.}
 
 \item{Boundary.knots_group}{PARAM_DESCRIPTION, Default: NULL}
 
@@ -87,7 +87,7 @@ MEM_Polynomial_Group_structure(
 OUTPUT_DESCRIPTION
 }
 \description{
-FUNCTION_DESCRIPTION
+This function fits a mixed-effects model (MEM) to potentially censored data structured by group when marginal and individual dynamics are described either by polynomials or B-spline curves.
 }
 \details{
 DETAILS

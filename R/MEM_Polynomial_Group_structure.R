@@ -1,20 +1,20 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param y PARAM_DESCRIPTION
+#' @title Polynomial Mixed-Effects Models with Censored and Group-Structured Responses
+#' @description This function fits a mixed-effects model (MEM) to potentially censored data structured by group when marginal and individual dynamics are described either by polynomials or B-spline curves. 
+#' @param y observed responses described either as a data frame containing at least a column named \emph{y} and possibly the columns \emph{x}, \emph{Group}, \emph{Id} and \emph{Cens} (among others), or as a vector of numerical values.
 #' @param x PARAM_DESCRIPTION, Default: NULL
-#' @param Group PARAM_DESCRIPTION, Default: NULL
-#' @param Id PARAM_DESCRIPTION, Default: NULL
-#' @param Cens PARAM_DESCRIPTION, Default: NULL
-#' @param marginal_dyn_type PARAM_DESCRIPTION, Default: 'polynomial'
-#' @param ind_dyn_type PARAM_DESCRIPTION, Default: 'polynomial'
-#' @param global_intercept PARAM_DESCRIPTION, Default: TRUE
-#' @param group_intercept PARAM_DESCRIPTION, Default: FALSE
-#' @param degree_group PARAM_DESCRIPTION, Default: 3
-#' @param Adaptive PARAM_DESCRIPTION, Default: 'none'
-#' @param min_knots_group PARAM_DESCRIPTION, Default: 2
-#' @param max_knots_group PARAM_DESCRIPTION, Default: 2
-#' @param knots_group PARAM_DESCRIPTION, Default: NULL
-#' @param df_group PARAM_DESCRIPTION, Default: NULL
+#' @param Group a vector of group indicator for each observed responses which can be defined if \emph{y} is a vector or a data frame without \emph{Group} column. If this variable is defined as NULL (default) and \emph{y} does not contain group information, all observed data are assumed to belong to the same group.
+#' @param Id a vector of individual ID for each observed responses which can be defined if \emph{y} is a vector or a data frame without \emph{Id} column. By default, this variable is defined as NULL
+#' @param Cens a vector of censoring indicator (if y >= ytrue, then Cens == 1). If this variable is defined as NULL (default) and \emph{y} does not contain \emph{Cens} column, observed data are assumed as uncensored. 
+#' @param marginal_dyn_type a character variable indicating the type of marginal dynamics. Options are 'polynomial' (default) and 'spline'.
+#' @param ind_dyn_type a character variable indicating the type of individual dynamics (random effects). Options are 'polynomial' (default) or 'spline'
+#' @param global_intercept a logical scalar. If TRUE (default) a global intercept (no group-specific) is included in the marginal dynamics
+#' @param group_intercept a logical scalar (same option for all groups) or vector. For each group, if TRUE, a group-specific intercept is included in the marginal dynamics. By default, this variable is defined as FALSE
+#' @param degree_group an integer scalar (same option for all groups) or vector. THe variable indicates for each group either the degree of polynomial functions or spline curves describing marginal dynamics. By default, the variable is fixed at 3.
+#' @param Adaptive an optional character variable that can be used when \emph{marginal_dyn_type} or \emph{ind_dyn_type} are chosen as 'spline'. Corresponding B-spline curves are then build with internal knot positions optimally estimated according to data (see \link[DeltaAUCpckg]{Optimal_knot_research} for more details). Options are 'none' (default), 'group , 'individual', and 'both'. 
+#' @param min_knots_group an optional integer scalar indicating the minimum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL
+#' @param max_knots_group an optional integer scalar indicating the maximum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL
+#' @param knots_group a numerical vector or a list of either numerical vectors or NULL (one for each group) indicating the internal knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).
+#' @param df_group an integer scalar (same option for all groups) or vector indicating the degrees of freedom to consider to build marginal B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. One can specify \emph{df_group} rather than \emph{knots_group} (see \link[splines]{bs} for more details). By default, this variable is defined as NULL.
 #' @param Boundary.knots_group PARAM_DESCRIPTION, Default: NULL
 #' @param ind_intercept PARAM_DESCRIPTION, Default: FALSE
 #' @param degree_ind PARAM_DESCRIPTION, Default: 3
@@ -49,17 +49,13 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
   # Step 1: Creation of the dataframe gathering y, x, cens and Group: #####
   # ------ #
   Check_y <- ArgumentCheck::newArgCheck()
-  # We check the class of the different variables y,x,cens,Group and we check if they are in accordance with each other
   if(isFALSE(is.data.frame(y) || is.numeric(y))){
-    # We check if y is rightly a dataframe or a vector of numerical values
     ArgumentCheck::addError(
       msg = "'y' must be a dataframe or a vector of numerical values",
       argcheck = Check_y
     )
   }else if(is.data.frame(y)){
-    # Y being a dataframe, we check if at least "x" belongs to y colnames (if the variable x is NULL)
-    # If "cens" and "Group" do not belong to y colnames and "cens" and "Group" variables are NULL, we assume no censored data and only one Group in data 
-    
+
     # Verification of 'y'
     Check_dataframe_y <- ArgumentCheck::newArgCheck()
     if("y" %notin% colnames(y)){
@@ -79,15 +75,12 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
           argcheck = Check_y
         )
       }else{
-        # if(class(x) != "numeric" & class(x) != "integer"){
         if(isFALSE(is.numeric(x) || is.integer(x))){
           ArgumentCheck::addError(
             msg = "The variable 'x' must be a vector of numerical values",
             argcheck = Check_x
           )
         }else{
-          # The variable x is a vector of numerical values and is not provided in the dataframe y 
-          # We add x in y. We need to verify that x and y have the same size
           if(nrow(y) != length(x)){
             ArgumentCheck::addError(
               msg = paste("The variables 'y' and 'x' must have the same size:",
@@ -100,14 +93,12 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
         }
       }
     }else{
-      # if(class(y$x) != "numeric" & class(y$x) != "integer"){
       if(isFALSE(is.numeric(y$x) || is.integer(y$x))){
         ArgumentCheck::addError(
           msg = "The variable 'x' provided in the dataframe 'y' must be a vector of numerics or integers.",
           argcheck = Check_x
         )
       }
-      # If 'x' is provided in the dataframe y and as independent argument, we display a warning message mentioning the use of the variable x given in y
       if(!is.null(x)){
         ArgumentCheck::addWarning(
           msg = "The variable 'x' has been provided twice (in 'y' and as argument 'x'). Values given in 'y' are used. Be sure to use the right values.",
@@ -462,7 +453,6 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
       Check_min_knots_group <- ArgumentCheck::newArgCheck()
       Check_max_knots_group <- ArgumentCheck::newArgCheck()
       
-      # if(class(min_knots_group) != "numeric"){
       if(isFALSE(is.numeric(min_knots_group))){
         ArgumentCheck::addError(
           msg = "The variable 'min_knots_group' must be an integer.",
@@ -477,7 +467,6 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
           )
         }
       }
-      # if(class(max_knots_group) != "numeric"){
       if(isFALSE(is.numeric(max_knots_group))){
         ArgumentCheck::addError(
           msg = "The variable 'max_knots_group' must be an integer.",
@@ -500,21 +489,19 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
       Check_df_group <- ArgumentCheck::newArgCheck()
       Check_Bound.knots_group <- ArgumentCheck::newArgCheck()
       
-      if(isFALSE(is.list(knots_group) || is.null(knots_group))){
+      if(isFALSE(is.list(knots_group) || is.numeric(knots_group) || is.null(knots_group))){
         ArgumentCheck::addError(
-          msg = "The variable 'knots_group' must either be NULL or a list.",
+          msg = "The variable 'knots_group' must either be NULL, a numeric vector or a list.",
           argcheck = Check_knot_group
         )
-        # }else if(class(knots_group) == "list"){
       }else if(is.list(knots_group)){
-        if(length(knots_group) != Nb_groups){
+        if(length(knots_group) %notin% c(1,Nb_groups)){
           ArgumentCheck::addError(
-            msg = paste("The variable 'knots_group' must be a list of length equal to the number of groups (",Nb_groups,")",sep=""),
+            msg = paste("The variable 'knots_group' must be a list of length 1 or equal to the number of groups (",Nb_groups,")",sep=""),
             argcheck = Check_knot_group
           )
         }else{
           for(g in 1:Nb_groups){
-            # if(class(knots_group[[g]]) != "numeric"){
             if(isFALSE(is.numeric(knots_group[[g]]))){
               ArgumentCheck::addError(
                 msg = "The variable 'knots_group' must be a list of vectors of numerical values, for all groups",
@@ -531,9 +518,9 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
           argcheck = Check_df_group
         )
       }else if(isFALSE(is.null(df_group))){
-        if(length(df_group) != Nb_groups){
+        if(length(df_group) %notin% c(1,Nb_groups)){
           ArgumentCheck::addError(
-            msg = paste("The variable 'df_group' must be a vector of length equal to the number of groups (",Nb_groups,")",sep=""),
+            msg = paste("The variable 'df_group' must be a vector of length 1 or equal to the number of groups (",Nb_groups,")",sep=""),
             argcheck = Check_df_group
           )
         }
@@ -544,7 +531,6 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
           msg = "The variable 'Boundary.knots_group' must either be NULL or a list.",
           argcheck = Check_Bound.knots_group
         )
-        # }else if(class(Boundary.knots_group) == "list"){
       }else if(is.list(Boundary.knots_group)){
         if(length(Boundary.knots_group) != Nb_groups){
           ArgumentCheck::addError(
