@@ -51,40 +51,74 @@ MEM_Polynomial_Group_structure(
 
 \item{group_intercept}{a logical scalar (same option for all groups) or vector. For each group, if TRUE, a group-specific intercept is included in the marginal dynamics. By default, this variable is defined as FALSE}
 
-\item{degree_group}{an integer scalar (same option for all groups) or vector. THe variable indicates for each group either the degree of polynomial functions or spline curves describing marginal dynamics. By default, the variable is fixed at 3.}
+\item{degree_group}{an integer scalar (same option for all groups) or vector. The variable indicates for each group either the degree of polynomial functions or spline curves describing marginal dynamics. By default, the variable is fixed at 3.}
 
 \item{Adaptive}{an optional character variable that can be used when \emph{marginal_dyn_type} or \emph{ind_dyn_type} are chosen as 'spline'. Corresponding B-spline curves are then build with internal knot positions optimally estimated according to data (see \link[DeltaAUCpckg]{Optimal_knot_research} for more details). Options are 'none' (default), 'group , 'individual', and 'both'.}
 
-\item{min_knots_group}{an optional integer scalar indicating the minimum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL}
+\item{min_knots_group}{an optional integer scalar indicating the minimum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as 2}
 
-\item{max_knots_group}{an optional integer scalar indicating the maximum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL}
+\item{max_knots_group}{an optional integer scalar indicating the maximum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as 2}
 
-\item{knots_group}{a numerical vector or a list of either numerical vectors or NULL (one for each group) indicating the internal knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).}
+\item{knots_group}{a numerical vector (same option for all groups) or a list of either numerical vectors or NULL (one for each group) indicating the internal knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL(see \link[splines]{bs} for more details).}
 
 \item{df_group}{an integer scalar (same option for all groups) or vector indicating the degrees of freedom to consider to build marginal B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. One can specify \emph{df_group} rather than \emph{knots_group} (see \link[splines]{bs} for more details). By default, this variable is defined as NULL.}
 
-\item{Boundary.knots_group}{PARAM_DESCRIPTION, Default: NULL}
+\item{Boundary.knots_group}{a numerical vector (same option for all groups) or a list of either numerical vectors or NULL (one for each group) indicating the boundary knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).}
 
-\item{ind_intercept}{PARAM_DESCRIPTION, Default: FALSE}
+\item{ind_intercept}{a logical scalar. If TRUE, an intercept is included in the individual dynamics (random effects). By default, this variable is defined as FALSE.}
 
-\item{degree_ind}{PARAM_DESCRIPTION, Default: 3}
+\item{degree_ind}{an integer scalar indicating either the degree of the polynomial functions or the B-spline curves describing individual dynamics. By default, this variable is fixed at 2.}
 
-\item{min_knots_ind}{PARAM_DESCRIPTION, Default: 2}
+\item{min_knots_ind}{an optional interger scalar indicating the minimum number of internal knots to consider in the research of optimal knots for individual dynamics. This variable is used only if \emph{ind_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'individual' or 'both'. By default, this variable is defined as 2}
 
-\item{max_knots_ind}{PARAM_DESCRIPTION, Default: 2}
+\item{max_knots_ind}{an optional interger scalar indicating the maximum number of internal knots to consider in the research of optimal knots for individual dynamics. This variable is used only if \emph{ind_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'individual' or 'both'. By default, this variable is defined as 2}
 
-\item{same_base_group_ind}{PARAM_DESCRIPTION, Default: FALSE}
+\item{same_base_group_ind}{an optional logical scalar indicating whether or not the same B-spline basis must be considered in group-specific and individual dynamics. This variable is used only if \emph{marginal_dyn_type} and \emph{ind_dyn_type} are chosen as 'spline'. If TRUE, each individual B-spline basis will be build as the corresponding group-specific B-spline basis evaluted at the individual predictor variable. By default, this variable is defined as FALSE.}
 
-\item{knots_ind}{PARAM_DESCRIPTION, Default: NULL}
+\item{knots_ind}{a numerical vector (same option for all individuals) or a list of numerical values or NULL indicating the internal knots for individual-specific B-spline curves. This variable will be used only if \emph{ind_dyn_type} has been chosen as 'spline', without adaptive knots. If this variable is defined as a list, internal knots can either be defined individually (one vector or NULL for each Id value), equivalent for each individual belong to the same group (one vector or NULL for each Group), or equivalent for each individual (one vector or NULL). By default, this variable is defined as NULL(see \link[splines]{bs} for more details).}
 
-\item{df_ind}{PARAM_DESCRIPTION, Default: NULL}
+\item{df_ind}{an integer scalar (same option for all individuals) or vector indicating the degrees of freedom to consier to build individual B-splines curves. This variable can be choosen different for each individual or equivalent for each individual belonging to the same group (one value for each group). By default, this variable is defined as NULL(see \link[splines]{bs} for more details).}
 
-\item{Boundary.knots_ind}{PARAM_DESCRIPTION, Default: NULL}
+\item{Boundary.knots_ind}{a numerical vector indicating the boundary knots for individual-specific B-spline curves. This variable will be used only if \emph{ind_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).}
 
-\item{...}{PARAM_DESCRIPTION}
+\item{...}{Further arguments to be passed (see \link[lmec]{lmec} for more details).}
 }
 \value{
-OUTPUT_DESCRIPTION
+A list containing: \tabular{ll}{
+\code{Model_estimation} \tab a list containing the results of the model estimation provided by the function \link[splines]{bs} \cr
+\code{Model_features} \tab a list of 3 elements: \cr
+\tab 1. \code{Groups}  -  a vector indicating the names of the groups involved in the model \cr
+\tab 2. \code{Marginal.dyn.feature}  -  a list summarizing the features of the marginal dynamics defined in the model (through input arguments):  \cr
+\tab \itemize{
+\item \code{dynamic.type} - a character scalar indicating the chosen type of marginal dynamics
+\item \code{intercept} -  a logical vector summarizing choices about global and group-specific intercepts (Number of groups + 1 values)
+
+For 'polynomial' marginal dynamics:
+\item \code{polynomial.degree} - an integer vector indicating the degree of polynomial functions
+
+For 'spline' marginal dynamics:
+\item \code{spline.degree} - an integer vector indicating the degree of B-spline curves
+\item \code{adaptive.splines} - a logical scalar indicating whether or not adaptive internal knots have been considered
+\item \code{knots} - a list of group-specific internal knots used to build B-spline basis. If the degrees of freedom were equals to the spline degrees, then NULL
+\item \code{df} - a numerical vector of group-specific degrees of freedom used to build B-spline basis.
+\item \code{boundary.knots} - a list of group-specific boundary knots used to build B-spline  basis.
+} \cr
+\tab 3. \code{Individual.dyn.feature}  -  a list summarizing the features of the individual dynamics defined in the model (through input arguments) \cr
+\tab\itemize{
+\item \code{dynamic.type} - a character scalar indicating the chosen type of individual dynamics
+\item \code{intercept} - a logical scalar indicating whether a random intercept was included in the model
+
+For 'polynomial' individual dynamics:
+\item \code{polynomial.degree} - an integer scalar indicating the degree of polynomial functions
+
+#' For 'spline' marginal dynamics:
+\item \code{spline.degree} - an integer scalar indicating the degree of B-spline curves
+\item \code{adaptive.splines} - a logical scalar indicating whether or not adaptive internal knots have been considered
+\item \code{knots} - a data frame of individually estimated internal knots (if \emph{Adaptive} chosen as 'individual' or 'both'), or a list of chosen individual internal knots
+\item \code{df} - a numerical vector of individual degrees of freedom
+\item \code{boundary.knots} - a numerical vector of individual boundary knots
+} \cr
+}
 }
 \description{
 This function fits a mixed-effects model (MEM) to potentially censored data structured by group when marginal and individual dynamics are described either by polynomials or B-spline curves.

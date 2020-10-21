@@ -9,23 +9,58 @@
 #' @param ind_dyn_type a character variable indicating the type of individual dynamics (random effects). Options are 'polynomial' (default) or 'spline'
 #' @param global_intercept a logical scalar. If TRUE (default) a global intercept (no group-specific) is included in the marginal dynamics
 #' @param group_intercept a logical scalar (same option for all groups) or vector. For each group, if TRUE, a group-specific intercept is included in the marginal dynamics. By default, this variable is defined as FALSE
-#' @param degree_group an integer scalar (same option for all groups) or vector. THe variable indicates for each group either the degree of polynomial functions or spline curves describing marginal dynamics. By default, the variable is fixed at 3.
+#' @param degree_group an integer scalar (same option for all groups) or vector. The variable indicates for each group either the degree of polynomial functions or spline curves describing marginal dynamics. By default, the variable is fixed at 3.
 #' @param Adaptive an optional character variable that can be used when \emph{marginal_dyn_type} or \emph{ind_dyn_type} are chosen as 'spline'. Corresponding B-spline curves are then build with internal knot positions optimally estimated according to data (see \link[DeltaAUCpckg]{Optimal_knot_research} for more details). Options are 'none' (default), 'group , 'individual', and 'both'. 
-#' @param min_knots_group an optional integer scalar indicating the minimum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL
-#' @param max_knots_group an optional integer scalar indicating the maximum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} and/or \emph{ind_dyn_type} are chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as NULL
-#' @param knots_group a numerical vector or a list of either numerical vectors or NULL (one for each group) indicating the internal knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).
+#' @param min_knots_group an optional integer scalar indicating the minimum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as 2
+#' @param max_knots_group an optional integer scalar indicating the maximum number of internal knots to consider in the research of optimal knots for marginal dynamics. This variable is used only if \emph{marginal_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'group' or 'both'. By default, this variable is defined as 2
+#' @param knots_group a numerical vector (same option for all groups) or a list of either numerical vectors or NULL (one for each group) indicating the internal knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL(see \link[splines]{bs} for more details).
 #' @param df_group an integer scalar (same option for all groups) or vector indicating the degrees of freedom to consider to build marginal B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. One can specify \emph{df_group} rather than \emph{knots_group} (see \link[splines]{bs} for more details). By default, this variable is defined as NULL.
-#' @param Boundary.knots_group PARAM_DESCRIPTION, Default: NULL
-#' @param ind_intercept PARAM_DESCRIPTION, Default: FALSE
-#' @param degree_ind PARAM_DESCRIPTION, Default: 3
-#' @param min_knots_ind PARAM_DESCRIPTION, Default: 2
-#' @param max_knots_ind PARAM_DESCRIPTION, Default: 2
-#' @param same_base_group_ind PARAM_DESCRIPTION, Default: FALSE
-#' @param knots_ind PARAM_DESCRIPTION, Default: NULL
-#' @param df_ind PARAM_DESCRIPTION, Default: NULL
-#' @param Boundary.knots_ind PARAM_DESCRIPTION, Default: NULL
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
+#' @param Boundary.knots_group a numerical vector (same option for all groups) or a list of either numerical vectors or NULL (one for each group) indicating the boundary knots for group-specific B-spline curves. This variable will be used only if \emph{marginal_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).
+#' @param ind_intercept a logical scalar. If TRUE, an intercept is included in the individual dynamics (random effects). By default, this variable is defined as FALSE.
+#' @param degree_ind an integer scalar indicating either the degree of the polynomial functions or the B-spline curves describing individual dynamics. By default, this variable is fixed at 2.
+#' @param min_knots_ind an optional interger scalar indicating the minimum number of internal knots to consider in the research of optimal knots for individual dynamics. This variable is used only if \emph{ind_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'individual' or 'both'. By default, this variable is defined as 2
+#' @param max_knots_ind an optional interger scalar indicating the maximum number of internal knots to consider in the research of optimal knots for individual dynamics. This variable is used only if \emph{ind_dyn_type} is chosen as 'spline' and \emph{Adaptive} chosen as 'individual' or 'both'. By default, this variable is defined as 2
+#' @param same_base_group_ind an optional logical scalar indicating whether or not the same B-spline basis must be considered in group-specific and individual dynamics. This variable is used only if \emph{marginal_dyn_type} and \emph{ind_dyn_type} are chosen as 'spline'. If TRUE, each individual B-spline basis will be build as the corresponding group-specific B-spline basis evaluted at the individual predictor variable. By default, this variable is defined as FALSE. 
+#' @param knots_ind a numerical vector (same option for all individuals) or a list of numerical values or NULL indicating the internal knots for individual-specific B-spline curves. This variable will be used only if \emph{ind_dyn_type} has been chosen as 'spline', without adaptive knots. If this variable is defined as a list, internal knots can either be defined individually (one vector or NULL for each Id value), equivalent for each individual belong to the same group (one vector or NULL for each Group), or equivalent for each individual (one vector or NULL). By default, this variable is defined as NULL(see \link[splines]{bs} for more details).
+#' @param df_ind an integer scalar (same option for all individuals) or vector indicating the degrees of freedom to consier to build individual B-splines curves. This variable can be choosen different for each individual or equivalent for each individual belonging to the same group (one value for each group). By default, this variable is defined as NULL(see \link[splines]{bs} for more details).
+#' @param Boundary.knots_ind a numerical vector indicating the boundary knots for individual-specific B-spline curves. This variable will be used only if \emph{ind_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).
+#' @param ... Further arguments to be passed (see \link[lmec]{lmec} for more details).
+
+#' @return A list containing: \tabular{ll}{
+#' \code{Model_estimation} \tab a list containing the results of the model estimation provided by the function \link[splines]{bs} \cr
+#' \code{Model_features} \tab a list of 3 elements: \cr
+#' \tab 1. \code{Groups}  -  a vector indicating the names of the groups involved in the model \cr
+#' \tab 2. \code{Marginal.dyn.feature}  -  a list summarizing the features of the marginal dynamics defined in the model (through input arguments):  \cr
+#' \tab \itemize{
+#' \item \code{dynamic.type} - a character scalar indicating the chosen type of marginal dynamics
+#' \item \code{intercept} -  a logical vector summarizing choices about global and group-specific intercepts (Number of groups + 1 values)
+#'  
+#' For 'polynomial' marginal dynamics: 
+#' \item \code{polynomial.degree} - an integer vector indicating the degree of polynomial functions
+#' 
+#' For 'spline' marginal dynamics:
+#' \item \code{spline.degree} - an integer vector indicating the degree of B-spline curves 
+#' \item \code{adaptive.splines} - a logical scalar indicating whether or not adaptive internal knots have been considered
+#' \item \code{knots} - a list of group-specific internal knots used to build B-spline basis. If the degrees of freedom were equals to the spline degrees, then NULL
+#' \item \code{df} - a numerical vector of group-specific degrees of freedom used to build B-spline basis.
+#' \item \code{boundary.knots} - a list of group-specific boundary knots used to build B-spline  basis.
+#' } \cr
+#' \tab 3. \code{Individual.dyn.feature}  -  a list summarizing the features of the individual dynamics defined in the model (through input arguments) \cr
+#' \tab\itemize{
+#' \item \code{dynamic.type} - a character scalar indicating the chosen type of individual dynamics 
+#' \item \code{intercept} - a logical scalar indicating whether a random intercept was included in the model
+#' 
+#' For 'polynomial' individual dynamics: 
+#' \item \code{polynomial.degree} - an integer scalar indicating the degree of polynomial functions
+#' 
+#' For 'spline' marginal dynamics:
+#' \item \code{spline.degree} - an integer scalar indicating the degree of B-spline curves
+#' \item \code{adaptive.splines} - a logical scalar indicating whether or not adaptive internal knots have been considered
+#' \item \code{knots} - a data frame of individually estimated internal knots (if \emph{Adaptive} chosen as 'individual' or 'both'), or a list of chosen individual internal knots
+#' \item \code{df} - a numerical vector of individual degrees of freedom
+#' \item \code{boundary.knots} - a numerical vector of individual boundary knots
+#'  } \cr
+#' }
 #' @details DETAILS
 #' @examples 
 #' @seealso 
@@ -143,7 +178,6 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
           argcheck = Check_Group
         )
       }
-      # If 'Group' is provided in the dataframe y and as independent argument, we display a warning message mentioning the use of the variable Group given in y
       if(isFALSE(is.null(Group))){
         ArgumentCheck::addWarning(
           msg = "The variable 'Group' has been provided twice (in 'y' and as argument 'Group'). Values given in 'y' are used. Be sure to use the right values.",
@@ -180,14 +214,12 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
         }
       }
     }else{
-      # if(class(y$Id) != "numeric" & class(y$Id) != "integer" & class(y$Id) != "character"){
       if(isFALSE(is.numeric(y$Id) || is.integer(y$Id) || is.character(y$Id))){
         ArgumentCheck::addError(
           msg = "The variable 'Id' provided in the dataframe 'y' must be a vector of numerics, integers or characters.",
           argcheck = Check_Id
         )
       }
-      # If 'Id' is provided in the dataframe y and as independent argument, we display a warning message mentioning the use of the variable Id given in y
       if(!is.null(Id)){
         ArgumentCheck::addWarning(
           msg = "The variable 'Id' has been provided twice (in 'y' and as argument 'Id'). Values given in 'y' are used. Be sure to use the right values.",
@@ -345,7 +377,7 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
     ArgumentCheck::finishArgCheck(Check_cens)
     
     data <- data.frame(Id=Id,x=x,Group=Group,y=y,Cens=Cens)
-  } # End of y is vector
+  } 
   ArgumentCheck::finishArgCheck(Check_y)
   
   data <- data[with(data,order(Group,Id,x)),]
@@ -526,15 +558,15 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
         }
       }
       
-      if(isFALSE(is.null(Boundary.knots_group) || is.list(Boundary.knots_group))){
+      if(isFALSE(is.null(Boundary.knots_group) || is.numeric(Boundary.knots_group) || is.list(Boundary.knots_group))){
         ArgumentCheck::addError(
           msg = "The variable 'Boundary.knots_group' must either be NULL or a list.",
           argcheck = Check_Bound.knots_group
         )
       }else if(is.list(Boundary.knots_group)){
-        if(length(Boundary.knots_group) != Nb_groups){
+        if(length(Boundary.knots_group) %notin% c(1,Nb_groups)){
           ArgumentCheck::addError(
-            msg = paste("The variable 'Boundary.knots_group' must be a list of length equal to the number of groups (",Nb_groups,")",sep=""),
+            msg = paste("The variable 'Boundary.knots_group' must be a list of length 1 or equal to the number of groups (",Nb_groups,")",sep=""),
             argcheck = Check_Bound.knots_group
           )
         }else{
