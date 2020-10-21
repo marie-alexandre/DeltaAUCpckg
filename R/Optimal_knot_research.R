@@ -1,23 +1,24 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param data PARAM_DESCRIPTION
-#' @param degree PARAM_DESCRIPTION
-#' @param minknot PARAM_DESCRIPTION
-#' @param maxknot PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
+#' @title Optimal Research B-Spline Internal Knots
+#' @description This function uses AIC criterion to estimate optimal position and number of knots by fitting free-knot splines to data with one independent and one dependent variable. It is assumed that knots are estimated for least-squares splines with no penalty using genetic algorithm. 
+#' @param data a data frame containing the independent variable (\emph{y}) and the dependent one (\emph{x}). 
+#' @param degree an integer scalar indicating the degree of the spline it. By default, this value is fixed at 3
+#' @param minknot an integer scalar indicating the minimum number of knots to consider. By default, this variable is fixed at 2
+#' @param maxknot an integer scalar indicating the maximum number of knots to consider. By default, this variable is fixed at 2.
+#' @param ... Further arguments to be passed (see \link[freeknotsplines]{freeknotfit} for more details).
+#' @return A numerical vector of optimal knots whose number can varied from \code{minknot} to \code{maxknot}
 #' @seealso 
-#'  \code{\link[freeknotsplines]{freeknotfit}}
+#'  \code{\link[freeknotsplines]{freeknotfit}} to have more details the method. 
 #' @rdname Optimal_knot_research
 #' @export 
 #' @importFrom freeknotsplines freelsgen
-Optimal_knot_research <- function(data,degree,minknot,maxknot){
+#' 
+Optimal_knot_research <- function(data,degree=3,minknot=2,maxknot=2,...){
   knot_research <- NULL
   
   tested_numknots <- seq(minknot,maxknot)
   
   tmp_research <- lapply(seq(1,length(tested_numknots)),function(i){
-    res <- tryCatch(freeknotsplines::freelsgen(x=data$x,y=data$y,degree=degree,numknot=tested_numknots[i],seed=555,stream=0),
+    res <- tryCatch(freeknotsplines::freelsgen(x=data$x,y=data$y,degree=degree,numknot=tested_numknots[i],...),
                     error=function(cond){"error"})
     return(res)
   })

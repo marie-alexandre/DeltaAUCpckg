@@ -42,3 +42,4 @@ if(interactive()){
 \seealso{
 \code{\link[ArgumentCheck]{addError}}
 }
+\keyword{internal}

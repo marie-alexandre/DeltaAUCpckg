@@ -35,3 +35,4 @@ DETAILS
 \seealso{
 \code{\link[ArgumentCheck]{addError}}
 }
+\keyword{internal}
