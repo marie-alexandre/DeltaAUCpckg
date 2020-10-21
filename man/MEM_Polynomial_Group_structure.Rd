@@ -111,7 +111,7 @@ For 'spline' marginal dynamics:
 For 'polynomial' individual dynamics:
 \item \code{polynomial.degree} - an integer scalar indicating the degree of polynomial functions
 
-#' For 'spline' marginal dynamics:
+For 'spline' marginal dynamics:
 \item \code{spline.degree} - an integer scalar indicating the degree of B-spline curves
 \item \code{adaptive.splines} - a logical scalar indicating whether or not adaptive internal knots have been considered
 \item \code{knots} - a data frame of individually estimated internal knots (if \emph{Adaptive} chosen as 'individual' or 'both'), or a list of chosen individual internal knots

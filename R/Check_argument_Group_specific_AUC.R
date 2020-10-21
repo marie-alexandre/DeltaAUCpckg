@@ -11,7 +11,6 @@
 #' @seealso 
 #'  \code{\link[ArgumentCheck]{addError}}
 #' @rdname Check_argument_Group_specific_AUC
-#' @export 
 #' @importFrom ArgumentCheck newArgCheck addError finishArgCheck addMessage
 Check_argument_Group_specific_AUC <- function(MEM_Pol_group,time,Groups,method,Averaged){
   '%notin%' <- Negate('%in%') 
