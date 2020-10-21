@@ -24,5 +24,5 @@ A numerical vector of optimal knots whose number can varied from \code{minknot} 
 This function uses AIC criterion to estimate optimal position and number of knots by fitting free-knot splines to data with one independent and one dependent variable. It is assumed that knots are estimated for least-squares splines with no penalty using genetic algorithm.
 }
 \seealso{
-\code{\link[freeknotsplines]{freeknotfit}} to have more details about methods.
+\code{\link[freeknotsplines]{freeknotfit}} to have more details the method.
 }
