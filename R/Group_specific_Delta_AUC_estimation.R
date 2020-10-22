@@ -31,12 +31,7 @@
 #' @param Averaged a logical scalar. If TRUE, the function return the difference of normalized AUC (nAUC) where nAUC is computated as the AUC divided by the range of time of calculation. If FALSE (dafault), the classic AUC is calculated.
 #' @return 
 #' A numerical scalar defined as \eqn{\Delta}AUC = AUC2 - AUC1 (or \eqn{\Delta}nAUC = nAUC2 - nAUC1)  with AUC1 (or nAUC1) and  AUC2 (or nAUC) being respectively estimated as the AUC (or nAUC) for the Group1 and for the Group2.
-##' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
+##'
 #' @rdname Group_specific_Delta_AUC_estimation
 #' @export 
 Group_specific_Delta_AUC_estimation <- function(MEM_Pol_group,Group1,Group2,time.G1,time.G2,method="trapezoid",Averaged=FALSE){

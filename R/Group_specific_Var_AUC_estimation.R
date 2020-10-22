@@ -1,5 +1,5 @@
 #' @title Variance of the Area Under The Curve of Group-Specific Polynomial Marginal Dynamics
-#' @description This function calculate the variance of the area under the curve of marginal dynamics modeled by group-structured polynomials or B-spline curves in Mixed-Effects models
+#' @description This function calculates the variance of the area under the curve of marginal dynamics modeled by group-structured polynomials or B-spline curves in Mixed-Effects models
 #' 
 #' @param MEM_Pol_group A list with similar structure than the output provided by the function \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}. 
 #' 

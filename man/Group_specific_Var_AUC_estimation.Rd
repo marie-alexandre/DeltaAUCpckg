@@ -47,7 +47,7 @@ If \code{dynamic.type} is defined as 'spline':
 A numerical vector containing the estimation of the variance of the AUC (or nAUC) for each group defined in the \code{Groups} vector.
 }
 \description{
-This function calculate the variance of the area under the curve of marginal dynamics modeled by group-structured polynomials or B-spline curves in Mixed-Effects models
+This function calculates the variance of the area under the curve of marginal dynamics modeled by group-structured polynomials or B-spline curves in Mixed-Effects models
 }
 \seealso{
 \code{\link[splines]{bs}}, \code{\link[Group_specific_AUC_estimation]{MEM_Polynomial_Group_structure}}
