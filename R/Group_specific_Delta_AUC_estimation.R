@@ -27,8 +27,8 @@
 #' @param Group2 a character scalar indicating the name of the second group whose marginal dynamics must be considered. This group name must belong to the set of group involved in the MEM for which we want to estimate the AUC (see \code{Groups} vector in \code{MEM_Pol_group}).
 #' @param time.G1 a numerical vector of time points (x-axis coordinates) to use for the Group1 AUC calculation.
 #' @param time.G2 a numerical vector of time points (x-axis coordinates) to use for the Group2 AUC calculation.
-#' @param method a character scalar indicating the interpolation method to use to estimate the AUC. Options are 'trapezoid' (default), 'lagrange' and 'spline'. In this verion, the 'spline' interpolation is implemented with "not-a-knot" spline boundary conditions.
-#' @param Averaged a logical scalar. If TRUE, the function return the difference of normalized AUC (nAUC) where nAUC is computated as the AUC divided by the range of time of calculation. If FALSE (dafault), the classic AUC is calculated.
+#' @param method a character scalar indicating the interpolation method to use to estimate the AUC. Options are 'trapezoid' (default), 'lagrange' and 'spline'. In this version, the 'spline' interpolation is implemented with "not-a-knot" spline boundary conditions.
+#' @param Averaged a logical scalar. If TRUE, the function return the difference of normalized AUC (nAUC) where nAUC is computated as the AUC divided by the range of time of calculation. If FALSE (default), the classic AUC is calculated.
 #' @return 
 #' A numerical scalar defined as \eqn{\Delta}AUC = AUC2 - AUC1 (or \eqn{\Delta}nAUC = nAUC2 - nAUC1)  with AUC1 (or nAUC1) and  AUC2 (or nAUC) being respectively estimated as the AUC (or nAUC) for the Group1 and for the Group2.
 ##'
