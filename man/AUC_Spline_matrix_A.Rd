@@ -2,26 +2,19 @@
 % Please edit documentation in R/AUC_Spline_matrix_A.R
 \name{AUC_Spline_matrix_A}
 \alias{AUC_Spline_matrix_A}
-\title{FUNCTION_TITLE}
+\title{Spline Interpolation Method - Matrix of Second Derivative Coefficients}
 \usage{
 AUC_Spline_matrix_A(time)
 }
 \arguments{
-\item{time}{PARAM_DESCRIPTION}
+\item{time}{a numerical vector of time points (x-axis cooordinates).}
 }
 \value{
-OUTPUT_DESCRIPTION
+a tridiagonal matrix corresponding to the weights of the second derivative of the variable of interest in the spline interpolation method. In this version, the matrix is build considering the "not-a-knot" spline boundary conditions.
 }
 \description{
-FUNCTION_DESCRIPTION
+In the area under the curve calculation using the spline interpolation method, the vector of the second derivative of the outcome of interest \emph{Y} is expressed as \eqn{A Y^{''} = B Y  + F}. This function calculate calculate the matrix A.
 }
 \details{
-DETAILS
-}
-\examples{
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
+METTRE l'équation au format Latex reliant Y'' et Y + Mettre la définition de la matrice.
 }
