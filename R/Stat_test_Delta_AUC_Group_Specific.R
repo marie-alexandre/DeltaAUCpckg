@@ -48,6 +48,7 @@
 #' @rdname Stat_test_Delta_AUC_Group_Specific
 #' @export 
 #' @importFrom stats pnorm qnorm
+#' 
 Stat_test_Delta_AUC_Group_Specific <- function(MEM_Pol_group,Group1,Group2,time.G1,time.G2,method="trapezoid",Group.dependence=TRUE,Averaged=FALSE,conf_level=0.95,alternative="two.sided"){
   AUC_G1 <- Group_specific_AUC_estimation(MEM_Pol_group=MEM_Pol_group,Groups=Group1,time=time.G1,method=method,Averaged=Averaged)
   AUC_G2 <- Group_specific_AUC_estimation(MEM_Pol_group=MEM_Pol_group,Groups=Group2,time=time.G2,method=method,Averaged=Averaged)
