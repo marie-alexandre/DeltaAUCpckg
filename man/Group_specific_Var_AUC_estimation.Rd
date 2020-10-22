@@ -2,7 +2,7 @@
 % Please edit documentation in R/Group_specific_Var_AUC_estimation.R
 \name{Group_specific_Var_AUC_estimation}
 \alias{Group_specific_Var_AUC_estimation}
-\title{FUNCTION_TITLE}
+\title{Variance of the Area Under The Curve of Group-Specific Polynomial Marginal Dynamics}
 \usage{
 Group_specific_Var_AUC_estimation(
   MEM_Pol_group,
@@ -13,25 +13,42 @@ Group_specific_Var_AUC_estimation(
 )
 }
 \arguments{
-\item{MEM_Pol_group}{PARAM_DESCRIPTION}
+\item{MEM_Pol_group}{A list with similar structure than the output provided by the function \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}.
 
-\item{time}{PARAM_DESCRIPTION}
+A list containing: \tabular{ll}{
+\code{Model_estimation} \tab either the variance-covariance matrix of the marginal (fixed) parameters for ALL the groups involved in the group-structured polynomial MEM, or a list containing at least this matrix labeled 'varFix'. \cr
+\code{Model_features} \tab a list of at least 2 elements: \cr
+\tab 1. \code{Groups}  -  a vector indicating the names of ALL the groups involved in the group-structured model. \cr
+\tab 2. \code{Marginal.dyn.feature}  -  a list summarizing the features of the marginal dynamics defined in the model:  \cr
+\tab \itemize{
+\item \code{dynamic.type} - a character scalar indicating the chosen type of marginal dynamics. Options are 'polynomial' or 'spline'
+\item \code{intercept} -  a logical vector summarizing choices about global and group-specific intercepts (Number of groups + 1) elements whose elements are named as ('global.intercept','group.intercept1', ..., 'group.interceptG') if G Groups are involved in the model. For each element of the vector, if TRUE, the considered intercept is considered as included in the model.
 
-\item{Groups}{PARAM_DESCRIPTION, Default: NULL}
+If \code{dynamic.type} is defined as 'polynomial':
+\item \code{polynomial.degree} - an integer vector indicating the degree of polynomial functions, one value for each group.
 
-\item{method}{PARAM_DESCRIPTION, Default: 'trapezoid'}
+If \code{dynamic.type} is defined as 'spline':
+\item \code{spline.degree} - an integer vector indicating the degree of B-spline curves, one for each group.
+\item \code{knots} - a list of group-specific internal knots used to build B-spline basis (one numerical vector for each group) (see \link[splines]{bs} for more details).
+\item \code{df} - a numerical vector of group-specific degrees of freedom used to build B-spline basis, (one for each group).
+\item \code{boundary.knots} - a list of group-specific boundary knots used to build B-spline  basis (one vector for each group) (see \link[splines]{bs} for more details).
+} \cr
+}}
 
-\item{Averaged}{PARAM_DESCRIPTION, Default: FALSE}
+\item{time}{a numerical vector of time points (x-axis coordinates).}
+
+\item{Groups}{a vector indicating the names of the groups belonging to the set of groups involved in the MEM for which we want to estimate the AUC  (a subset or the entire set of groups involved in the model can be considered). If NULL (default), the AUC for all the groups involved the MEM is calculated.}
+
+\item{method}{a character scalar indicating the interpolation method to use to estimate the AUC. Options are 'trapezoid' (default), 'lagrange' and 'spline'. In this version, the 'spline' interpolation is implemented with the "not-a-knot" spline boundary conditions.}
+
+\item{Averaged}{a logical scalar. If TRUE, the function return the normalized AUC (nAUC) computed as the AUC divided by the range of the time calculation. If FALSE (default), the classic AUC is calculated.}
 }
 \value{
-OUTPUT_DESCRIPTION
+A numerical vector containing the estimation of the variance of the AUC (or nAUC) for each group defined in the \code{Groups} vector.
 }
 \description{
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
+This function calculate the variance of the area under the curve of marginal dynamics modeled by group-structured polynomials or B-spline curves in Mixed-Effects models
 }
 \seealso{
-\code{\link[splines]{bs}}
+\code{\link[splines]{bs}}, \code{\link[Group_specific_AUC_estimation]{MEM_Polynomial_Group_structure}}
 }
