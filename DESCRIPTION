@@ -16,7 +16,6 @@ Imports:
   freeknotsplines,
   lmec,
   matlib,
-  splines,
-  mathjaxr
+  splines
 Suggests: 
     testthat

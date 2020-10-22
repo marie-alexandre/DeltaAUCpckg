@@ -39,7 +39,7 @@ If \code{dynamic.type} is defined as 'spline':
 
 \item{Groups}{a vector indicating the names of the groups belonging to the set of groups involved in the MEM for which we want to estimate the AUC  (a subset or the entire set of groups involved in the model can be considered).}
 
-\item{method}{a character scalar indicating the interpolation method to use to estimate the AUC. options are 'trapezoid' (default), 'lagrange' and 'spline'. In this version, the 'spline' interpolation is implemented with the "not-a-knot" spline boundary conditions.}
+\item{method}{a character scalar indicating the interpolation method to use to estimate the AUC. Options are 'trapezoid' (default), 'lagrange' and 'spline'. In this version, the 'spline' interpolation is implemented with the "not-a-knot" spline boundary conditions.}
 
 \item{Averaged}{a logical scalar. If TRUE, the function return the normalized AUC (nAUC) computed as the AUC divided by the range of the time calculation. If FALSE (default), the classic AUC is calculated.}
 }
@@ -47,8 +47,9 @@ If \code{dynamic.type} is defined as 'spline':
 A numerical vector containing the estimation of the AUC (or nAUC) for each Groups defined in the \code{Groups} vector.
 }
 \description{
-This function estimate the area under the curve of marginal dynamics modeled by Group-structured polynomial or B-spline marginal dynamics.
+This function estimates the area under the curve of marginal dynamics modeled by group-structured polynomials or B-spline curves.
 }
 \seealso{
-\code{\link[splines]{bs}}
+\code{\link[splines]{bs}},
+\code{\link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}}
 }
