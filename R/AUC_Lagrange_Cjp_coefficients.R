@@ -1,13 +1,14 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param ind_j PARAM_DESCRIPTION
-#' @param ind_p PARAM_DESCRIPTION
-#' @param t PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
+#' @title Time Dependent Coefficients Cjp for AUC Lagrange Interpolation Method
+#' @description This function calculate the time-dependent coefficients Cjp involved in the calculation of the are under the curve when the Lagrange interpolation method is used.
+#' 
+#' @param ind_j a numerical scalar indicating the value of the index j.
+#' @param ind_p a numerical scalar indicating the value of the index p
+#' @param t a numerical vector of time points (x-axis coordinates) to consider for the AUC calculation.
+#' @return a numerical scalar corresponding to the coefficient Cjp evaluated for j = \code{ind_j} and p = \code{ind_p}.
+#' @details The coefficients Cij are defined as (METTRE l'equation sous format Latex).
 #' @rdname AUC_Lagrange_Cjp_coefficients
 #' @export 
+#' 
 AUC_Lagrange_Cjp_coefficients <- function(ind_j,ind_p,t){
   if(ind_j == 2){
     term1 <- (t[ind_j] - t[ind_j-1])*prod(sapply(seq(0,2),function(l){

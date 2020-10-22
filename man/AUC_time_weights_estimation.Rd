@@ -2,21 +2,21 @@
 % Please edit documentation in R/AUC_time_weights_estimation.R
 \name{AUC_time_weights_estimation}
 \alias{AUC_time_weights_estimation}
-\title{FUNCTION_TITLE}
+\title{Weights for AUC Matrix Formulation}
 \usage{
 AUC_time_weights_estimation(time, method)
 }
 \arguments{
-\item{time}{PARAM_DESCRIPTION}
+\item{time}{a numerical vector of time points (x-axis coordinates for AUC calculation).}
 
-\item{method}{PARAM_DESCRIPTION}
+\item{method}{a character scalar indicating the interpolation method of interest. Options are 'trapezoid', 'lagrange' and 'spline'. In this version the 'spline' interpolation method is implemented with the "not-a-knot" spline boundary conditions.}
 }
 \value{
-OUTPUT_DESCRIPTION
+a numerical scalar with same length than the vector \code{time} corresponding to the weights \emph{W}.
 }
 \description{
-FUNCTION_DESCRIPTION
+In matrix formulation, the area under a curve of interest, named \emph{Y}, can be expressed as matrix product of a vector of weights \emph{W} and the vector of the values of \emph{Y}. This function calculates the weights \emph{W} when AUC is calculated either by the trapezoid, the Lagrange or the Spline interpolation methods.
 }
 \details{
-DETAILS
+The weights \emph{W} are defined as (METTRE les equations sous format Latex).
 }

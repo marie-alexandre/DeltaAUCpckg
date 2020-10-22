@@ -2,23 +2,23 @@
 % Please edit documentation in R/AUC_Lagrange_Cjp_coefficients.R
 \name{AUC_Lagrange_Cjp_coefficients}
 \alias{AUC_Lagrange_Cjp_coefficients}
-\title{FUNCTION_TITLE}
+\title{Time Dependent Coefficients Cjp for AUC Lagrange Interpolation Method}
 \usage{
 AUC_Lagrange_Cjp_coefficients(ind_j, ind_p, t)
 }
 \arguments{
-\item{ind_j}{PARAM_DESCRIPTION}
+\item{ind_j}{a numerical scalar indicating the value of the index j.}
 
-\item{ind_p}{PARAM_DESCRIPTION}
+\item{ind_p}{a numerical scalar indicating the value of the index p}
 
-\item{t}{PARAM_DESCRIPTION}
+\item{t}{a numerical vector of time points (x-axis coordinates) to consider for the AUC calculation.}
 }
 \value{
-OUTPUT_DESCRIPTION
+a numerical scalar corresponding to the coefficient Cjp evaluated for j = \code{ind_j} and p = \code{ind_p}.
 }
 \description{
-FUNCTION_DESCRIPTION
+This function calculate the time-dependent coefficients Cjp involved in the calculation of the are under the curve when the Lagrange interpolation method is used.
 }
 \details{
-DETAILS
+The coefficients Cij are defined as (METTRE l'equation sous format Latex).
 }

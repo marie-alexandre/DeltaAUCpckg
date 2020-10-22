@@ -1,12 +1,12 @@
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param time PARAM_DESCRIPTION
-#' @param method PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
+#' @title Weights for AUC Matrix Formulation
+#' @description In matrix formulation, the area under a curve of interest, named \emph{Y}, can be expressed as matrix product of a vector of weights \emph{W} and the vector of the values of \emph{Y}. This function calculates the weights \emph{W} when AUC is calculated either by the trapezoid, the Lagrange or the Spline interpolation methods.
+#' @param time a numerical vector of time points (x-axis coordinates for AUC calculation).
+#' @param method a character scalar indicating the interpolation method of interest. Options are 'trapezoid', 'lagrange' and 'spline'. In this version the 'spline' interpolation method is implemented with the "not-a-knot" spline boundary conditions. 
+#' @return a numerical scalar with same length than the vector \code{time} corresponding to the weights \emph{W}.
+#' @details The weights \emph{W} are defined as (METTRE les equations sous format Latex).
 #' @rdname AUC_time_weights_estimation
 #' @export 
+#' 
 AUC_time_weights_estimation <- function(time,method){
   Weights <- NULL
   mg <- length(time)
