@@ -60,6 +60,32 @@ A numerical scalar corresponding to the variance of the difference of AUC (\eqn{
 \description{
 This function calculates the variance of the difference of area under the curve of two marginal dynamics modeled by group-structured polynomials or B-spline curve in Mixed-Effects models.
 }
+\examples{
+# Download of data
+data("HIV_Simu_Dataset_Delta01_cens")
+data <- HIV_Simu_Dataset_Delta01_cens
+
+# Change factors in character vectors
+data$id <- as.character(data$id) ; data$Group <- as.character(data$Group)
+
+# Example 1: We consider the variable 'MEM_Pol_Group' as the output of our function 'MEM_Polynomial_Group_structure'
+MEM_estimation <- MEM_Polynomial_Group_structure(y=data$VL,x=data$time,Group=data$Group,Id=data$id,Cens=data$cens)
+Var_Delta_AUC_estimation <- Group_specific_Var_Delta_AUC_estimation(MEM_Pol_group=MEM_estimation,Group1="Group1",Group2="Group2",
+                                                                    time.G1=unique(data$time[which(data$Group=="Group1")]),
+                                                                    time.G2=unique(data$time[which(data$Group=="Group2")]))
+                                                                    
+Example 2: We consider results of MEM estimation from another source. We have to give build the variable 'MEM_Pol_group' with the good structure
+ # We build the variable 'MEM_Pol_group.1' with the results of MEM estimation obtained for two groups 
+Covariance_Matrix_1 <- matrix(rnorm(7*7,mean=0,sd=0.01),ncol=7,nrow=7) # Generation of random matrix
+Covariance_Matrix_1 <- Covariance_Matrix_1 \%*\% t(Covariance_Matrix_1) # Transform the matrix into symmetric one
+MEM_Pol_group.1 <- list(Model_estimation=Covariance_Matrix_1, # Covariance matrix of fixed effects for all parameters
+                       Model_features=list(Groups=c("Group1","Group2"),
+                                           Marginal.dyn.feature=list(dynamic.type="polynomial",intercept=c(global.intercept=TRUE,group.intercept1=FALSE,group.intercept2=FALSE),polynomial.degree=c(3,3))))
+                                           
+Var_Delta_AUC_estimation_2 <- Group_specific_Var_Delta_AUC_estimation(MEM_Pol_group=MEM_Pol_group.1,Group1="Group1",Group2="Group2",
+                                                                    time.G1=unique(data$time[which(data$Group=="Group1")]),
+                                                                    time.G2=unique(data$time[which(data$Group=="Group2")]))
+}
 \seealso{
 \code{\link[splines]{bs}},
 \code{\link[DeltaAUCpckg]{Group_specific_Var_AUC_estimation}},

@@ -23,13 +23,48 @@
 #' } \cr
 #' }
 #' 
-#' @param time a numerical vector of time points (x-axis coordinates). 
+#' @param time a numerical vector of time points (x-axis coordinates) or a list of numerical vectors (with as much elements than the number of groups in \code{Groups}).
 #' @param Groups a vector indicating the names of the groups belonging to the set of groups involved in the MEM for which we want to estimate the AUC  (a subset or the entire set of groups involved in the model can be considered). If NULL (default), the AUC for all the groups involved the MEM is calculated.
 #' @param method a character scalar indicating the interpolation method to use to estimate the AUC. Options are 'trapezoid' (default), 'lagrange' and 'spline'. In this version, the 'spline' interpolation is implemented with the "not-a-knot" spline boundary conditions. 
 #' @param Averaged a logical scalar. If TRUE, the function return the normalized AUC (nAUC) computed as the AUC divided by the range of the time calculation. If FALSE (default), the classic AUC is calculated.
 #' @return A numerical vector containing the estimation of the variance of the AUC (or nAUC) for each group defined in the \code{Groups} vector.
 #' @seealso 
-#'  \code{\link[splines]{bs}}, \code{\link[Group_specific_AUC_estimation]{MEM_Polynomial_Group_structure}}
+#'  \code{\link[splines]{bs}}, 
+#'  \code{\link[Group_specific_AUC_estimation]{MEM_Polynomial_Group_structure}}
+#'  
+#' @examples 
+#' # Download of data
+#' data("HIV_Simu_Dataset_Delta01_cens")
+#' data <- HIV_Simu_Dataset_Delta01_cens
+#' 
+#' # Change factors in character vectors
+#' data$id <- as.character(data$id) ; data$Group <- as.character(data$Group)
+#' 
+#' # Example 1: We consider the variable 'MEM_Pol_Group' as the output of our function 'MEM_Polynomial_Group_structure'
+#' MEM_estimation <- MEM_Polynomial_Group_structure(y=data$VL,x=data$time,Group=data$Group,Id=data$id,Cens=data$cens)
+#' Var_AUC_estimation <- Group_specific_Var_AUC_estimation(MEM_Pol_group=MEM_estimation,time=list(unique(data$time[which(data$Group == "Group1")]),
+#'                                                          unique(data$time[which(data$Group == "Group2")])))
+#'                                                          
+#' Example 2: We consider results of MEM estimation from another source. We have to give build the variable 'MEM_Pol_group' with the good structure
+#'  # We build the variable 'MEM_Pol_group.1' with the results of MEM estimation obtained for two groups 
+#' Covariance_Matrix_1 <- matrix(rnorm(7*7,mean=0,sd=0.01),ncol=7,nrow=7) # Generation of random matrix
+#' Covariance_Matrix_1 <- Covariance_Matrix_1 %*% t(Covariance_Matrix_1) # Transform the matrix into symmetric one
+#' MEM_Pol_group.1 <- list(Model_estimation=Covariance_Matrix_1, # Covariance matrix of fixed effects for all parameters
+#'                        Model_features=list(Groups=c("Group1","Group2"),
+#'                                            Marginal.dyn.feature=list(dynamic.type="polynomial",intercept=c(global.intercept=TRUE,group.intercept1=FALSE,group.intercept2=FALSE),polynomial.degree=c(3,3))))
+#'                                            
+#' Var_AUC_estimation_G1.1 <- Group_specific_Var_AUC_estimation(MEM_Pol_group.1,time=unique(data$time[which(data$Group == "Group1")]),Groups=c("Group1"))
+#' 
+#' # We build the variable 'MEM_Pol_group.2' with the results of MEM estimation obtained only for the group of interest (extraction)
+#' Covariance_Matrix_2 <-  matrix(rnorm(4*4,mean=0,sd=0.01),ncol=4,nrow=4) # Generation of random matrix
+#' Covariance_Matrix_2 <- Covariance_Matrix_2 %*% t(Covariance_Matrix_2) # Transform the matrix into a symetric one
+#' MEM_Pol_group.2 <- list(Model_estimation=Covariance_Matrix_2, # Covariance matrix of fixed effects, only for the parameters from Group1
+#'                        Model_features=list(Groups=c("Group1"),
+#'                                            Marginal.dyn.feature=list(dynamic.type="polynomial",intercept=c(global.intercept=TRUE,group.intercept1=FALSE),polynomial.degree=c(3))))
+#'                                            
+#' Var_AUC_estimation_G1.2 <- Group_specific_Var_AUC_estimation(MEM_Pol_group=MEM_Pol_group.2,time=unique(data$time[which(data$Group == "Group1")]))  
+
+#'  
 #' @rdname Group_specific_Var_AUC_estimation
 #' @export 
 #' @importFrom splines bs
@@ -51,19 +86,20 @@ Group_specific_Var_AUC_estimation <- function(MEM_Pol_group,time,Groups=NULL,met
   
   
   # Extraction of population parameters according to their groups
-  Population_params <- MEM_Pol_group$Model_estimation$beta
-  Population_variance <- MEM_Pol_group$Model_estimation$varFix
-  MEM_groups <- Model_features$Groups
+  if(is.list(MEM_Pol_group$Model_estimation)){
+    Population_variance <- MEM_Pol_group$Model_estimation$varFix
+  }else{
+    Population_variance <- MEM_Pol_group$Model_estimation
+  }
+  MEM_groups <- as.vector(Model_features$Groups)
   
   global_intercept <- Marginal_dynamics$intercept["global.intercept"]
   ind_params <- 0
-  Group_parameters <- list()
   Group_variance <- list()
   for(g in 1:length(MEM_groups)){
     params <- NULL
     index_params <- NULL
     if(global_intercept){
-      params <- c(params,Population_params[1])
       index_params <- c(index_params,1)  
       if(g == 1){
         ind_params <- ind_params + 1
@@ -76,11 +112,9 @@ Group_specific_Var_AUC_estimation <- function(MEM_Pol_group,time,Groups=NULL,met
       Nb_group_params <- as.numeric(1*Marginal_dynamics$intercept[paste("group.intercept",g,sep="")] + 
                                       Marginal_dynamics$polynomial.degree[g])
     }
-    params <- c(params,Population_params[(ind_params+1):(ind_params+Nb_group_params)])
     index_params <- c(index_params,seq(ind_params+1,ind_params+Nb_group_params))
-    variance_matrix <- Population_variance[index_params,index_params]
     ind_params <- ind_params + Nb_group_params
-    Group_parameters[[MEM_groups[g]]] <- params
+    variance_matrix <- Population_variance[index_params,index_params]
     Group_variance[[MEM_groups[g]]] <- variance_matrix
   }
   
