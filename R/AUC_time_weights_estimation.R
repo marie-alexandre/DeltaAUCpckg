@@ -1,9 +1,29 @@
 #' @title Weights for AUC Matrix Formulation
-#' @description In matrix formulation, the area under a curve of interest, named \emph{Y}, can be expressed as matrix product of a vector of weights \emph{W} and the vector of the values of \emph{Y}. This function calculates the weights \emph{W} when AUC is calculated either by the trapezoid, the Lagrange or the Spline interpolation methods.
-#' @param time a numerical vector of time points (x-axis coordinates for AUC calculation).
+#' @description \loadmathjax In matrix formulation, the area under a curve of interest, named \emph{Y}, can be expressed as matrix product of a vector of weights \emph{W} and the vector of the values of \emph{Y}. This function calculates the weights \emph{W} when AUC is calculated either by the trapezoid, the Lagrange or the Spline interpolation methods.
+#' 
+#' @param time a numerical vector of time points of length m (x-axis coordinates for AUC calculation).
 #' @param method a character scalar indicating the interpolation method of interest. Options are 'trapezoid', 'lagrange' and 'spline'. In this version the 'spline' interpolation method is implemented with the "not-a-knot" spline boundary conditions. 
-#' @return a numerical scalar with same length than the vector \code{time} corresponding to the weights \emph{W}.
-#' @details The weights \emph{W} are defined as (METTRE les equations sous format Latex).
+#' 
+#' @details In matrix formulation, the AUC of the outcome \mjseqn{Y} can be expressed as \mjseqn{\text{AUC} = W \cdot Y}, with \mjseqn{W} defined by the following expressions for the trapezoid, the Lagrange and the spline interpolation methods.
+#' 
+#' **Trapezoid method:** 
+#' \mjsdeqn{W_j = \frac{t_{j+1} - t_j}{2} \text{ if } j=1} 
+#' \mjsdeqn{W_j = \frac{t_{j} - t_{j-1}}{2} \text{ if } j=m} 
+#' \mjsdeqn{W_j = \frac{t_{j+1} - t_{j-1}}{2} \text{ otherwise}} 
+#'
+#' **Lagrange method:** (see \code{\link[DeltaAUCpckg]{AUC_Lagrange_Cjp_coefficients}} for the definition of the Cjp coefficients)
+#' \mjsdeqn{W_j = \frac{C_{\[2\]\[j-1\]}}{\prod_{l=0 ;\ l\neq (j-1)}^{P=2} (t_j-t_{j+1})} + \sum_{p=0}^{P=3} \frac{C_{\[j-1+p\]\[3-p\]}}{\prod_{l=0 ;\ l\neq (3-p)}^{P=3} (t_j-t_{j-3+p+l})} \text{ if } j=1,2,3} 
+#' \mjsdeqn{W_j = \frac{C_{\[m\]\[j-(m-2)\]}}{\prod_{l=0 ;\ l\neq (j-(m-2))}^{P=2} (t_j-t_{j-2+l})} + \sum_{p=0}^{m-j} \frac{C_{\[j-1+p\]\[3-p\]}}{\prod_{l=0 ;\ l\neq (3-p)}^{P=3} (t_j-t_{j-3+p+l})} \text{ if } j=m-2,m-1,m} 
+#' \mjsdeqn{W_j = \sum_{p=0}^{m-j} \frac{C_{\[j-1+p\]\[3-p\]}}{\prod_{l=0 ;\ l\neq (3-p)}^{P=3} (t_j-t_{j-3+p+l})} \text{ othermise}} 
+#' 
+#' **Spline method:**  (see \code{\link[DeltaAUCpckg]{AUC_Spline_matrix_A}} and \code{\link[DeltaAUCpckg]{AUC_Spline_matrix_B}} for the definition of Matrices A and B)
+#'  \mjsdeqn{W_j = \sum_{p=2}^m -\frac{(t_p-t_{p-1})^3}{24}(u_{pj}+u_{p-1j}) + W_j^{trap.}}
+#'  where \mjseqn{(u_{pj})} is the element \mjseqn{U(p,j)} with \mjseqn{U} a matrix defined as \mjseqn{U = A^{-1}B}.
+#'  
+#' 
+#' 
+#' @return A numerical scalar with same length than the vector \code{time} corresponding to the weights \emph{W}.
+#' 
 #' @rdname AUC_time_weights_estimation
 #' @export 
 #' 

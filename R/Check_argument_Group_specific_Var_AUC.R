@@ -7,12 +7,7 @@
 #' @param Averaged PARAM_DESCRIPTION
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
+#'
 #' @seealso 
 #'  \code{\link[ArgumentCheck]{addError}}
 #' @rdname Check_argument_Group_specific_Var_AUC

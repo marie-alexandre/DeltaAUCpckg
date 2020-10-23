@@ -18,7 +18,7 @@ Group_specific_Delta_AUC_estimation(
 \item{MEM_Pol_group}{A list with similar structure than the output provided by the function \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}.
 
 A list containing: \tabular{ll}{
-\code{Model_estimation} \tab either the vector of the marginal parameter estimates (at least for the groups \code{Group1} and \code{Group2}) involved in the group-structured polynomial MEM, or a list containing this vector labeled \emph{'beta'} among other arguments (see \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure} for details about the parameter order). \cr
+\code{Model_estimation} \tab either the vector of the marginal parameter estimates (at least for the groups \code{Group1} and \code{Group2}), or a list containing this vector labeled \emph{'beta'} among other arguments (see \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure} for details about the parameter order). \cr
 \code{Model_features} \tab a list of at least 2 elements: \cr
 \tab 1. \code{Groups}  -  a vector indicating the names of the groups whose fixed parameters are given.  \cr
 \tab 2. \code{Marginal.dyn.feature}  -  a list summarizing the features of the marginal dynamics defined in the model:  \cr
@@ -63,7 +63,7 @@ data <- HIV_Simu_Dataset_Delta01_cens
 # Change factors in character vectors
 data$id <- as.character(data$id) ; data$Group <- as.character(data$Group)
 
-# Example 1: We consider the variable 'MEM_Pol_Group' as the output of our function 'MEM_Polynomial_Group_structure'
+# Example 1: We consider the variable 'MEM_Pol_Group' as the output of our function \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}
 MEM_estimation_1 <- MEM_Polynomial_Group_structure(y=data$VL,x=data$time,Group=data$Group,Id=data$id,Cens=data$cens)
 Delta_AUC_1 <- Group_specific_Delta_AUC_estimation(MEM_Pol_group=MEM_estimation_1,Group1="Group1",Group2="Group2",
                                                    time.G1=unique(data$time[which(data$Group=="Group1")]),

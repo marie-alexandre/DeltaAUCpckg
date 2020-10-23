@@ -4,13 +4,13 @@
 #' @param MEM_Pol_group A list with similar structure than the output provided by the function \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}. 
 #' 
 #' A list containing: \tabular{ll}{
-#' \code{Model_estimation} \tab either the variance-covariance matrix of the marginal (fixed) parameters for ALL the groups involved in the group-structured polynomial MEM, or a list containing at least this matrix labeled 'varFix'. \cr
+#' \code{Model_estimation} \tab either the variance-covariance matrix of the marginal (fixed) parameters (at least for the groups whose Variance of AUC is to estimate), or a list containing at least this matrix labeled _'varFix'_ (see \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure} for details about the parameter order). \cr
 #' \code{Model_features} \tab a list of at least 2 elements: \cr
-#' \tab 1. \code{Groups}  -  a vector indicating the names of ALL the groups involved in the group-structured model. \cr
+#' \tab 1. \code{Groups}  -  a vector indicating the names of the groups whose variance of fixed parameters are given.\cr
 #' \tab 2. \code{Marginal.dyn.feature}  -  a list summarizing the features of the marginal dynamics defined in the model:  \cr
 #' \tab \itemize{
 #' \item \code{dynamic.type} - a character scalar indicating the chosen type of marginal dynamics. Options are 'polynomial' or 'spline'
-#' \item \code{intercept} -  a logical vector summarizing choices about global and group-specific intercepts (Number of groups + 1) elements whose elements are named as ('global.intercept','group.intercept1', ..., 'group.interceptG') if G Groups are involved in the model. For each element of the vector, if TRUE, the considered intercept is considered as included in the model. 
+#' \item \code{intercept} -  a logical vector summarizing choices about global and group-specific intercepts (Number of groups + 1) elements whose elements are named as ('global.intercept','group.intercept1', ..., 'group.interceptG') if G Groups are defined in \code{MEM_Pol_group}. For each element of the vector, if TRUE, the considered intercept is considered as included in the model. 
 #'  
 #' If \code{dynamic.type} is defined as 'polynomial': 
 #' \item \code{polynomial.degree} - an integer vector indicating the degree of polynomial functions, one value for each group. 
@@ -24,10 +24,12 @@
 #' }
 #' 
 #' @param time a numerical vector of time points (x-axis coordinates) or a list of numerical vectors (with as much elements than the number of groups in \code{Groups}).
-#' @param Groups a vector indicating the names of the groups belonging to the set of groups involved in the MEM for which we want to estimate the AUC  (a subset or the entire set of groups involved in the model can be considered). If NULL (default), the AUC for all the groups involved the MEM is calculated.
+#' @param Groups  a vector indicating the names of the groups belonging to the set of groups involved in \code{MEM_Pol_group} for which we want to estimate the AUC  (a subset or the entire set of groups involved in the model can be considered). If NULL (default), the AUC for all the groups involved the MEM is calculated.
 #' @param method a character scalar indicating the interpolation method to use to estimate the AUC. Options are 'trapezoid' (default), 'lagrange' and 'spline'. In this version, the 'spline' interpolation is implemented with the "not-a-knot" spline boundary conditions. 
 #' @param Averaged a logical scalar. If TRUE, the function return the normalized AUC (nAUC) computed as the AUC divided by the range of the time calculation. If FALSE (default), the classic AUC is calculated.
+#' 
 #' @return A numerical vector containing the estimation of the variance of the AUC (or nAUC) for each group defined in the \code{Groups} vector.
+#' 
 #' @seealso 
 #'  \code{\link[splines]{bs}}, 
 #'  \code{\link[Group_specific_AUC_estimation]{MEM_Polynomial_Group_structure}}
@@ -40,7 +42,7 @@
 #' # Change factors in character vectors
 #' data$id <- as.character(data$id) ; data$Group <- as.character(data$Group)
 #' 
-#' # Example 1: We consider the variable 'MEM_Pol_Group' as the output of our function 'MEM_Polynomial_Group_structure'
+#' # Example 1: We consider the variable 'MEM_Pol_Group' as the output of our function \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}
 #' MEM_estimation <- MEM_Polynomial_Group_structure(y=data$VL,x=data$time,Group=data$Group,Id=data$id,Cens=data$cens)
 #' Var_AUC_estimation <- Group_specific_Var_AUC_estimation(MEM_Pol_group=MEM_estimation,time=list(unique(data$time[which(data$Group == "Group1")]),
 #'                                                          unique(data$time[which(data$Group == "Group2")])))
@@ -68,6 +70,7 @@
 #' @rdname Group_specific_Var_AUC_estimation
 #' @export 
 #' @importFrom splines bs
+#' 
 Group_specific_Var_AUC_estimation <- function(MEM_Pol_group,time,Groups=NULL,method="trapezoid",Averaged=FALSE){
   '%notin%' <- Negate('%in%') 
   

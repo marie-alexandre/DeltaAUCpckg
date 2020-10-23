@@ -7,14 +7,18 @@
 AUC_Spline_matrix_A(time)
 }
 \arguments{
-\item{time}{a numerical vector of time points (x-axis cooordinates).}
+\item{time}{a numerical vector of time points of length m (x-axis coordinates).}
 }
 \value{
 a tridiagonal matrix corresponding to the weights of the second derivative of the variable of interest in the spline interpolation method. In this version, the matrix is build considering the "not-a-knot" spline boundary conditions.
 }
 \description{
-In the area under the curve calculation using the spline interpolation method, the vector of the second derivative of the outcome of interest \emph{Y} is expressed as \eqn{A Y^{''} = B Y  + F}. This function calculate calculate the matrix A.
+\loadmathjax  In the area under the curve calculation using the spline interpolation method, the vector of the second derivative of the outcome of interest \mjseqn{Y} is expressed as \mjseqn{A Y^{''} = B Y  + F}. This function calculate calculate the matrix A.
 }
 \details{
-METTRE l'équation au format Latex reliant Y'' et Y + Mettre la définition de la matrice.
+The tridiagonal matrix \mjseqn{A} is defined as (for the "not-a-knot boundary conditions):
+The \mjseqn{j}th line of the matrix, \mjseqn{A_{[j,\ :]}} is given by
+\mjsdeqn{A_{[j,\ :]} = \left(\frac{1}{h_2},-\left[\frac{1}{h_2} + \frac{1}{h_3}\right], \frac{1}{h_3}, 0, \cdots, 0 \right) \text{ if } j=1}
+\mjsdeqn{A_{[j,\ :]} = \left(0, \cdots, 0, \frac{1}{h_{m-1}},-\left[\frac{1}{h_{m-1}} + \frac{1}{h_m}\right], \frac{1}{h_m} \right) \text{ if } j=m}
+\mjsdeqn{A_{[j,\ :]} = \left(0_1, \cdots, 0_{j-2}, \frac{h_j}{6},\frac{h_j+h_{j+1}}{3}, \frac{h_{j+1}}{6}, 0_{j+2}, \cdots, 0_{m} \right) \text{ otherwise }}
 }
