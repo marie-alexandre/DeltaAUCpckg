@@ -19,6 +19,9 @@ Imports:
   splines,
   ArgumentCheck
 Suggests: 
-    testthat
+    testthat,
+    mathjaxr
+RdMacros:
+    mathjaxr
 Depends: 
     R (>= 2.10)

@@ -16,13 +16,13 @@ Group_specific_AUC_estimation(
 \item{MEM_Pol_group}{A list with similar structure than the output provided by the function \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure}.
 
 A list containing: \tabular{ll}{
-\code{Model_estimation} \tab either the vector of the marginal parameter estimates for ALL the groups involved in the group-structured polynomial MEM, or a list containing at least this vector labeled 'beta'. \cr
+\code{Model_estimation} \tab either the vector of the marginal parameter estimates (at least for the groups called in \code{Groups}) involved in the group-structured polynomial MEM, or a list containing this vector labeled \emph{'beta'} among other arguments (see \link[DeltaAUCpckg]{MEM_Polynomial_Group_structure} for details about the parameter order). \cr
 \code{Model_features} \tab a list of at least 2 elements: \cr
-\tab 1. \code{Groups}  -  a vector indicating the names of ALL the groups involved in the group-structured model. \cr
+\tab 1. \code{Groups}  -  a vector indicating the names of the groups whose fixed parameters are given. \cr
 \tab 2. \code{Marginal.dyn.feature}  -  a list summarizing the features of the marginal dynamics defined in the model:  \cr
 \tab \itemize{
 \item \code{dynamic.type} - a character scalar indicating the chosen type of marginal dynamics. Options are 'polynomial' or 'spline'
-\item \code{intercept} -  a logical vector summarizing choices about global and group-specific intercepts (Number of groups + 1) elements whose elements are named as ('global.intercept','group.intercept1', ..., 'group.interceptG') if G Groups are involved in the model. For each element of the vector, if TRUE, the considered intercept is considered as included in the model.
+\item \code{intercept} -  a logical vector summarizing choices about global and group-specific intercepts (Number of groups + 1) elements whose elements are named as ('global.intercept','group.intercept1', ..., 'group.interceptG') if G Groups are defined in \code{MEM_Pol_group}. For each element of the vector, if TRUE, the considered intercept is considered as included in the model (see \emph{Examples}).
 
 If \code{dynamic.type} is defined as 'polynomial':
 \item \code{polynomial.degree} - an integer vector indicating the degree of polynomial functions, one value for each group.
@@ -37,7 +37,7 @@ If \code{dynamic.type} is defined as 'spline':
 
 \item{time}{a numerical vector of time points (x-axis coordinates) or a list of numerical vectors (with as much elements than the number of groups in \code{Groups}).}
 
-\item{Groups}{a vector indicating the names of the groups belonging to the set of groups involved in the MEM for which we want to estimate the AUC  (a subset or the entire set of groups involved in the model can be considered). If NULL (default), the AUC for all the groups involved the MEM is calculated.}
+\item{Groups}{a vector indicating the names of the groups belonging to the set of groups involved in \code{MEM_Pol_group} for which we want to estimate the AUC  (a subset or the entire set of groups involved in the model can be considered). If NULL (default), the AUC for all the groups involved the MEM is calculated.}
 
 \item{method}{a character scalar indicating the interpolation method to use to estimate the AUC. Options are 'trapezoid' (default), 'lagrange' and 'spline'. In this version, the 'spline' interpolation is implemented with the "not-a-knot" spline boundary conditions.}
 

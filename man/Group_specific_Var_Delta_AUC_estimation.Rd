@@ -85,6 +85,7 @@ MEM_Pol_group.1 <- list(Model_estimation=Covariance_Matrix_1, # Covariance matri
 Var_Delta_AUC_estimation_2 <- Group_specific_Var_Delta_AUC_estimation(MEM_Pol_group=MEM_Pol_group.1,Group1="Group1",Group2="Group2",
                                                                     time.G1=unique(data$time[which(data$Group=="Group1")]),
                                                                     time.G2=unique(data$time[which(data$Group=="Group2")]))
+
 }
 \seealso{
 \code{\link[splines]{bs}},

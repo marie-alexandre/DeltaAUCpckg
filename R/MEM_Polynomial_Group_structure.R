@@ -1,5 +1,5 @@
 #' @title Polynomial Mixed-Effects Models with Censored and Group-Structured Responses
-#' @description This function fits a mixed-effects model (MEM) to potentially censored data structured by group when marginal and individual dynamics are described either by polynomials or B-spline curves. 
+#' @description  \loadmathjax This function fits a mixed-effects model (MEM) to potentially censored data structured by group when marginal and individual dynamics are described either by polynomials or B-spline curves. 
 #' @param y observed responses described either as a data frame containing at least a column named _'y'_ and possibly the columns _'x'_, _'Group'_, _'Id'_ and _'Cens'_ (among others), or as a vector of numerical values.
 #' @param x a numerical vector representing the x-axis coordinates corresponding to the observed responses (e.g. time of observations) which can be defined is \code{y} is a vector or a data frame without \code{x} column. By default, this variable is defined as NULL. 
 #' @param Group a vector of group indicator for each observed responses which can be defined if \code{y} is a vector or a data frame without \code{Group} column. If this variable is defined as NULL (default) and \emph{y} does not contain group information, all observed data are assumed to belong to the same group.
@@ -26,8 +26,8 @@
 #' @param Boundary.knots_ind a numerical vector indicating the boundary knots for individual-specific B-spline curves. This variable will be used only if \code{ind_dyn_type} has been chosen as 'spline', without adaptive knots. By default, this variable is defined as NULL  (see \link[splines]{bs} for more details).
 #' @param ... Further arguments to be passed (see \link[lmec]{lmec} for more details).
 
-#' @return A list containing: \tabular{ll}{
-#' \code{Model_estimation} \tab a list containing the results of the model estimation provided by the function \link[splines]{bs} \cr
+#' @return  A list containing: \tabular{ll}{
+#' \code{Model_estimation} \tab a list containing the results of the model estimation provided by the function \link[lmec]{lmec}. In this list, the vector of fixed parameters called \code{beta}, the parameters are returned in the following order: \mjseqn{\beta = (\gamma_0,\beta_0^1, \cdots, \beta_{K_1}^1,\cdots,\beta_0^g,\cdots,\beta_{K_g}^g,\cdots,\beta_0^G,\cdots,\beta_{K_G}^G)}.   \cr
 #' \code{Model_features} \tab a list of 3 elements: \cr
 #' \tab 1. \code{Groups}  -  a vector indicating the names of the groups involved in the model \cr
 #' \tab 2. \code{Marginal.dyn.feature}  -  a list summarizing the features of the marginal dynamics defined in the model (through input arguments):  \cr
@@ -56,13 +56,21 @@
 #' For 'spline' marginal dynamics:
 #' \item \code{spline.degree} - an integer scalar indicating the degree of B-spline curves
 #' \item \code{adaptive.splines} - a logical scalar indicating whether or not adaptive internal knots have been considered
-#' \item \code{knots} - a data frame of individually estimated internal knots (if \emph{Adaptive} chosen as 'individual' or 'both'), or a list of chosen individual internal knots
+#' \item \code{knots} - a data frame of individually estimated internal knots (if \code{Adaptive} chosen as 'individual' or 'both'), or a list of chosen individual internal knots
 #' \item \code{df} - a numerical vector of individual degrees of freedom
 #' \item \code{boundary.knots} - a numerical vector of individual boundary knots
 #'  } \cr
 #' }
-#' @details DETAILS
-#' 
+#' @details The Mixed-Effects model describing the outcome of interest \mjseqn{Y_{ij,g_i}} of the subject \mjseqn{i} in the group \mjseqn{g_i} at the \mjseqn{j}th time point (x-axis) is given by
+#'   \mjsdeqn{Y_{ij,g_i} = \gamma_0+ \sum_{g=1}^{G} \mathbb{1_{\[g_i=g\]}} \times F_g(t_{ij,g}) + h_i(t_{ij,g_i}) + \varepsilon_{ij} }
+#' where \mjseqn{\gamma_0} is the global (non group-specific) intercept and the functions \mjseqn{F_g} and \mjseqn{h_i} are the non-linear smooth functions describing respectively the marginal group-specific dynamics and the individual dynamics (random effects). 
+#' Through this function, the group-specific functions are defined as following, where \mjseqn{\beta_0^g} is the optional \code{group_intercept}:
+#'   \mjsdeqn{F_g(t_{ij,g}) = \beta_0^g + \sum_{k=1}^{K_g} \beta^g_k f^k_g(t_{ij,g})}
+#' If \code{marginal_dyn_type} is defined as 'polynomial', \mjseqn{K_g} = \code{degree_group} and \mjseqn{f^k_g(t_{ij,g}) = t_{ij,g}^k} and if \code{marginal_dyn_type} is defined as 'spline', \mjseqn{K_g} = \code{df_group} (see \link[splines]{bs} for more details) and \mjseqn{f^k_g(t_{ij,g})} is the \mjseqn{k}th group-specific spline basis. 
+#' Similarly, the indvidual dynamics are described by the following functions, with \mjseqn{b_{0i}} as optional \code{ind_intercept}:
+#' \mjsdeqn{h_i(t_{ij,g}) = b_{0i} + \sum_{k=1}^{K_i} b_{ki} \Psi_k^i(t_{ij,g})}
+#' If \code{ind_dyn_type} is defined as 'polynomial', \mjseqn{K_i} = \code{degree_ind} and \mjseqn{\Psi_k^i(t_{ij,g}) = t_{ij,g}^k} and if \code{ind_dyn_type} is defined as 'spline', \mjseqn{K_i} = \code{df_ind} (see \link[splines]{bs} for more details) and \mjseqn{\Psi_k^i(t_{ij,g})} is the \mjseqn{k}th individual spline basis. 
+#'  
 #' 
 #' @examples 
 #' # Download of data
