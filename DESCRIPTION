@@ -16,7 +16,8 @@ Imports:
   freeknotsplines,
   lmec,
   matlib,
-  splines
+  splines,
+  ArgumentCheck
 Suggests: 
     testthat
 Depends: 
