@@ -5,9 +5,12 @@
 #' @param minknot an integer scalar indicating the minimum number of knots to consider. By default, this variable is fixed at 2
 #' @param maxknot an integer scalar indicating the maximum number of knots to consider. By default, this variable is fixed at 2.
 #' @param ... Further arguments to be passed (see \link[freeknotsplines]{freeknotfit} for more details).
+#' 
 #' @return A numerical vector of optimal knots whose number can varied from \code{minknot} to \code{maxknot}
+#' 
 #' @seealso 
-#'  \code{\link[freeknotsplines]{freeknotfit}} to have more details the method. 
+#'  \code{\link[freeknotsplines]{freeknotfit}} for more details about the method. 
+#'  
 #' @rdname Optimal_knot_research
 #' @export 
 #' @importFrom freeknotsplines freelsgen

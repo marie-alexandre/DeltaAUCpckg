@@ -1,5 +1,6 @@
 #' @title Polynomial Mixed-Effects Models with Censored and Group-Structured Responses
 #' @description  \loadmathjax This function fits a mixed-effects model (MEM) to potentially censored data structured by group when marginal and individual dynamics are described either by polynomials or B-spline curves. 
+#' 
 #' @param y observed responses described either as a data frame containing at least a column named _'y'_ and possibly the columns _'x'_, _'Group'_, _'Id'_ and _'Cens'_ (among others), or as a vector of numerical values.
 #' @param x a numerical vector representing the x-axis coordinates corresponding to the observed responses (e.g. time of observations) which can be defined is \code{y} is a vector or a data frame without \code{x} column. By default, this variable is defined as NULL. 
 #' @param Group a vector of group indicator for each observed responses which can be defined if \code{y} is a vector or a data frame without \code{Group} column. If this variable is defined as NULL (default) and \emph{y} does not contain group information, all observed data are assumed to belong to the same group.
@@ -92,6 +93,7 @@
 #'  \code{\link[splines]{bs}},
 #'  \code{\link[lmec]{lmec}},
 #'  \code{\link[DeltaAUCpckg]{Optimal_knot_research}}
+#'  
 #' @rdname MEM_Polynomial_Group_structure
 #' @export 
 #' @importFrom ArgumentCheck newArgCheck addError finishArgCheck addWarning addMessage

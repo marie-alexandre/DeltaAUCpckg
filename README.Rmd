@@ -16,46 +16,17 @@ knitr::opts_chunk$set(
 # DeltaAUCpckg
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/marie-alexandre/DeltaAUCpckg.svg?branch=master)](https://travis-ci.com/marie-alexandre/DeltaAUCpckg)
+<!-- [![Travis build status](https://travis-ci.com/marie-alexandre/DeltaAUCpckg.svg?branch=master)](https://travis-ci.com/marie-alexandre/DeltaAUCpckg) -->
 <!-- badges: end -->
 
-The goal of DeltaAUCpckg is to ...
+The goal of DeltaAUCpckg is to propose a statistical test evaluating the difference of Area under the curve (AUC) of a given outcome between two distinct groups of individuals. To this end, longitudinal data obtained for subjects splitted into G distincts groups are fitted with a Mixed-Effects model whose fixed-effects (marginal dynamics) and random-effects (individual dynamics) are respectively modeled by group-structured polynomial or B-splines curves and individual polynomial or B-spline curves. 
 
 ## Installation
 
-You can install the released version of DeltaAUCpckg from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("DeltaAUCpckg")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+You can install the development version of DeltaAUCpckg from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("marie-alexandre/DeltaAUCpckg")
 ```
-<!-- ## Example -->
 
-<!-- This is a basic example which shows you how to solve a common problem: -->
-
-<!-- ```{r example} -->
-<!-- library(DeltaAUCpckg) -->
-<!-- ## basic example code -->
-<!-- ``` -->
-
-<!-- What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so: -->
-
-<!-- ```{r cars} -->
-<!-- summary(cars) -->
-<!-- ``` -->
-
-<!-- You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. -->
-
-<!-- You can also embed plots, for example: -->
-
-<!-- ```{r pressure, echo = FALSE} -->
-<!-- plot(pressure) -->
-<!-- ``` -->
-
-<!-- In that case, don't forget to commit and push the resulting figure files, so they display on GitHub! -->
