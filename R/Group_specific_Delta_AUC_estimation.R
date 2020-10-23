@@ -31,7 +31,31 @@
 #' @param Averaged a logical scalar. If TRUE, the function return the difference of normalized AUC (nAUC) where nAUC is computated as the AUC divided by the range of time of calculation. If FALSE (default), the classic AUC is calculated.
 #' @return 
 #' A numerical scalar defined as \eqn{\Delta}AUC = AUC2 - AUC1 (or \eqn{\Delta}nAUC = nAUC2 - nAUC1)  with AUC1 (or nAUC1) and  AUC2 (or nAUC) being respectively estimated as the AUC (or nAUC) for the Group1 and for the Group2.
-##'
+#' 
+#' @examples 
+#' # Download of data
+#' data("HIV_Simu_Dataset_Delta01_cens")
+#' data <- HIV_Simu_Dataset_Delta01_cens
+#' 
+#' # Change factors in character vectors
+#' data$id <- as.character(data$id) ; data$Group <- as.character(data$Group)
+#' 
+#' # Example 1: We consider the variable 'MEM_Pol_Group' as the output of our function 'MEM_Polynomial_Group_structure'
+#' MEM_estimation_1 <- MEM_Polynomial_Group_structure(y=data$VL,x=data$time,Group=data$Group,Id=data$id,Cens=data$cens)
+#' Delta_AUC_1 <- Group_specific_Delta_AUC_estimation(MEM_Pol_group=MEM_estimation_1,Group1="Group1",Group2="Group2",
+#'                                                    time.G1=unique(data$time[which(data$Group=="Group1")]),
+#'                                                    time.G2=unique(data$time[which(data$Group=="Group2")]))
+#'
+#' Example 2: We consider results of MEM estimation from another source. We have to give build the variable 'MEM_Pol_group' with the good structure
+#'  # We build the variable 'MEM_estimation_2' with the results of MEM estimation obtained for two groups 
+#' MEM_estimation_2 <- list(Model_estimation=c(1.077,0.858,-0.061,0.0013,0.887,-0.066,0.0014), # c(global.intercept,beta1.G1,beta2.G1,beta2.G1,beta1.G2,beta2.G2,beta3.G2)
+#'                         Model_features=list(Groups=c("Group1","Group2"),
+#'                                             Marginal.dyn.feature=list(dynamic.type="polynomial",intercept=c(global.intercept=TRUE,group.intercept1=FALSE,group.intercept2=FALSE),polynomial.degree=c(3,3))))
+#' Delta_AUC_2 <- Group_specific_Delta_AUC_estimation(MEM_Pol_group=MEM_estimation_2,Group1="Group1",Group2="Group2",
+#'                                                    time.G1=unique(data$time[which(data$Group=="Group1")]),
+#'                                                    time.G2=unique(data$time[which(data$Group=="Group2")]))
+
+#' 
 #' @rdname Group_specific_Delta_AUC_estimation
 #' @export 
 Group_specific_Delta_AUC_estimation <- function(MEM_Pol_group,Group1,Group2,time.G1,time.G2,method="trapezoid",Averaged=FALSE){
