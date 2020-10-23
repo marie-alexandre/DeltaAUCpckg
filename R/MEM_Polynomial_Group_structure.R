@@ -408,7 +408,7 @@ MEM_Polynomial_Group_structure <- function(y,x=NULL,Group=NULL,Id=NULL,Cens=NULL
   
   
   # Estimation of the number of Group based on data
-  Groups <- unique(data$Group)
+  Groups <- as.vector(unique(data$Group))
   Nb_groups <- length(Groups)
   
  
